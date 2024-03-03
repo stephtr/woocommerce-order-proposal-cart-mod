@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Order Proposal | Cart Mod
  * Description: Modifies WooCommerce's cart behaviour
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Stephan Troyer
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,6 +23,8 @@ function wc_modifications_register_settings() {
     register_setting( 'wc_modifications_options_group', 'wc_modifications_payment_method' );
     add_option( 'wc_modifications_custom_shipping_method_title', '' );
     register_setting( 'wc_modifications_options_group', 'wc_modifications_custom_shipping_method_title' );
+    add_option( 'wc_modifications_show_order_proposal_payment_method_with_others_available', 'yes' );
+    register_setting( 'wc_modifications_options_group', 'wc_modifications_show_order_proposal_payment_method_with_others_available' );
 }
 add_action( 'admin_init', 'wc_modifications_register_settings' );
 
@@ -62,6 +64,8 @@ function wc_modifications_filter_payment_methods_based_on_shipping($available_ga
         return $available_gateways;
     }
 
+    $show_order_proposal_with_others_available = get_option('wc_modifications_show_order_proposal_payment_method_with_others_available') === 'yes';
+
     // Check the session for chosen shipping methods
     $chosen_shipping_methods = WC()->session->get('chosen_shipping_methods');
     $chosen_shipping_method = !empty($chosen_shipping_methods) ? $chosen_shipping_methods[0] : '';
@@ -73,7 +77,7 @@ function wc_modifications_filter_payment_methods_based_on_shipping($available_ga
         } else {
             $available_gateways = array();
         }
-    } else if (isset($available_gateways[$specified_payment_method])) {
+    } else if (isset($available_gateways[$specified_payment_method]) && !$show_order_proposal_with_others_available) {
         unset($available_gateways[$specified_payment_method]);
     }
     return $available_gateways;

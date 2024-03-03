@@ -33,6 +33,14 @@ function wc_modifications_settings() {
             'options'  => $payment_gateways,
         ),
         array(
+            'title'    => __( 'Show Order Proposal Payment Method when other methods are avilable', 'woocommerce-cart-modifications' ),
+            'desc'     => __( 'Disable to hide the order proposal payment method when other payment methods are available for a given order.', 'woocommerce-cart-modifications' ),
+            'id'       => 'wc_modifications_show_order_proposal_payment_method_with_others_available',
+            'type'     => 'checkbox',
+            'default'  => 'yes',
+            'desc_tip' => true,
+        ),
+        array(
             'type' => 'sectionend',
             'id'   => 'wc_modifications_settings_end'
         )
